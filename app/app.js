@@ -148,9 +148,9 @@ $('#estimate').addEventListener('click', e => {
   if (!act) return;
   if (act === 'add' && pendingEstimate) {
     const { text, note, ...r } = pendingEstimate;
-    const it = addItem(state, current, { mealId: null, img: null, desc: text, ...r });
+    const k = current, it = addItem(state, k, { mealId: null, img: null, desc: text, ...r });
     persist(); renderToday();
-    toast(`${r.name} toegevoegd · ${nl(r.kcal)} kcal`, () => { removeItem(state, current, it.id); persist(); renderToday(); });
+    toast(`${r.name} toegevoegd · ${nl(r.kcal)} kcal`, () => { removeItem(state, k, it.id); persist(); renderToday(); });
     $('#customText').value = '';
   }
   pendingEstimate = null;
@@ -182,10 +182,10 @@ function openManual() {
     let r;
     try { r = manualItem({ name: v('name'), kcal: v('kcal'), carbs: v('carbs'), protein: v('protein'), fat: v('fat'), fiber: v('fiber') }); }
     catch (err) { $('#m-error').textContent = err.message; return; }
-    const it = addItem(state, current, { mealId: null, img: null, desc: 'eigen macro\'s', ...r });
+    const k = current, it = addItem(state, k, { mealId: null, img: null, desc: 'eigen macro\'s', ...r });
     persist(); sheet.close(); renderToday();
     $('#customText').value = '';
-    toast(`${r.name} toegevoegd · ${nl(r.kcal)} kcal`, () => { removeItem(state, current, it.id); persist(); renderToday(); });
+    toast(`${r.name} toegevoegd · ${nl(r.kcal)} kcal`, () => { removeItem(state, k, it.id); persist(); renderToday(); });
   };
   sheet.showModal();
 }
@@ -200,7 +200,6 @@ const sheetHead = (title, img) => `
       <div class="t"><h2 id="sheetTitle" tabindex="-1" autofocus>${esc(title)}</h2></div>
       <button type="button" class="icon-btn" data-act="close" aria-label="Sluiten"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
     </div>`;
-const fmtAmount = n => nl(n, 2);
 
 function liveLine(r) {
   return `<b class="num">${nl(r.kcal)} kcal</b>
@@ -236,8 +235,7 @@ function openMeal(meal) {
   sheet.oninput = e => {
     const row = e.target.closest('[data-var]');
     if (!row) return;
-    const n = parseFloat(e.target.value.replace(',', '.'));
-    sel.amounts[row.dataset.var] = Number.isFinite(n) ? Math.max(0, n) : 0;
+    sel.amounts[row.dataset.var] = parseAmount(e.target.value);
     update();
   };
   sheet.onfocusin = e => { if (e.target.tagName === 'INPUT') e.target.select(); };
@@ -258,10 +256,10 @@ function openMeal(meal) {
     } else if (b.dataset.act === 'add') {
       const r = calc(meal, sel);
       if (r.kcal <= 0) return toast('Vul eerst een hoeveelheid in');
-      const it = addItem(state, current, { mealId: meal.id, name: meal.name, img: meal.img, desc: describe(meal, sel), ...r });
+      const k = current, it = addItem(state, k, { mealId: meal.id, name: meal.name, img: meal.img, desc: describe(meal, sel), ...r });
       persist(); sheet.close(); renderToday();
       toast(`${meal.name} toegevoegd · ${nl(r.kcal)} kcal`, () => {
-        removeItem(state, current, it.id); persist(); renderToday();
+        removeItem(state, k, it.id); persist(); renderToday();
       });
     } else if (b.dataset.act === 'close') sheet.close();
   };

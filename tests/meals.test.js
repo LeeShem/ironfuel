@@ -1,6 +1,6 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
-const { MEALS, MEATS, defaults, calc, describe } = require('../app/meals.js');
+const { MEALS, MEATS, defaults, calc, describe, fmtAmount, parseAmount } = require('../app/meals.js');
 
 const meal = id => MEALS.find(m => m.id === id);
 const near = (actual, expected, tol = 1) =>
@@ -94,4 +94,18 @@ test('korte omschrijving voor in het dagoverzicht', () => {
   assert.equal(describe(meal('kiwi'), { amounts: { stuks: 2 }, choices: {} }), '2×');
   const s = meal('skyr');
   assert.equal(describe(s, defaults(s)), '200 g skyr · 0,5 schep whey · 50 g muesli · 10 g honing · 60 g bevroren fruit');
+});
+
+test('stokbrood op 0: rucola en augurk tellen dan ook niet mee', () => {
+  const m = meal('stokbrood');
+  assert.equal(calc(m, { amounts: { stokbrood: 0, kip: 0, eieren: 0 }, choices: {} }).kcal, 0);
+});
+
+test('hoeveelheden tonen en teruglezen, ook vanaf 1000', () => {
+  for (const n of [0, 0.5, 35, 1000, 1250.5]) assert.equal(parseAmount(fmtAmount(n)), n);
+  assert.equal(fmtAmount(1000), '1000');
+  assert.equal(fmtAmount(0.5), '0,5');
+  assert.equal(parseAmount('2,5'), 2.5);
+  assert.equal(parseAmount('abc'), 0);
+  assert.equal(parseAmount('-3'), 0);
 });

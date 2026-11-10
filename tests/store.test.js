@@ -125,3 +125,20 @@ test('eigen macro\'s: ongeldige invoer wordt geweigerd', () => {
   assert.throws(() => S.manualItem({ name: 'x', kcal: 'abc', carbs: '', protein: '', fat: '', fiber: '' }), /getal/);
   assert.throws(() => S.manualItem({ name: 'x', kcal: '', carbs: '', protein: '', fat: '', fiber: '' }), /calorieën/);
 });
+
+test('coach-context: dag zonder eten en training (bijv. alles verwijderd) staat niet in het weekoverzicht', () => {
+  const st = S.emptyState();
+  const it = S.addItem(st, '2026-11-08', { name: 'Banaan', kcal: 105, carbs: 27, protein: 1, fat: 0, fiber: 3 });
+  S.removeItem(st, '2026-11-08', it.id);
+  const c = S.coachContext(st, '2026-11-10', new Date(2026, 10, 10, 9, 0));
+  assert.doesNotMatch(c, /2026-11-08/);
+  assert.match(c, /Afgelopen 7 dagen:\n- geen gegevens/);
+});
+
+test('opslag met onverwachte vorm: app start leeg, oude gegevens apart bewaard', () => {
+  for (const raw of ['null', '[]', '{"x":1}']) {
+    const store = fakeStorage({ [S.KEY]: raw });
+    assert.deepEqual(S.loadState(store), S.emptyState(), raw);
+    assert.equal(store.getItem(S.KEY + ':kapot'), raw);
+  }
+});

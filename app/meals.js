@@ -130,6 +130,10 @@ function calc(meal, { amounts, choices }) {
   return { kcal, carbs, protein, fat, fiber };
 }
 
+// Hoeveelheid in een invulveld: zonder duizendtalpunt, zodat '1000' ook weer als 1000 wordt gelezen
+const fmtAmount = n => n.toLocaleString('nl-NL', { maximumFractionDigits: 2, useGrouping: false });
+const parseAmount = s => { const n = parseFloat(String(s).replace(',', '.')); return Number.isFinite(n) ? Math.max(0, n) : 0; };
+
 // Korte omschrijving, bijv. "2 sneetjes bruin · 2 plakjes kaas"
 function describe(meal, { amounts, choices }) {
   return meal.vars.filter(v => amounts[v.id] > 0).map(v => {
@@ -141,4 +145,4 @@ function describe(meal, { amounts, choices }) {
   }).join(' · ');
 }
 
-if (typeof module !== 'undefined') module.exports = { MEALS, MEATS, defaults, calc, describe };
+if (typeof module !== 'undefined') module.exports = { MEALS, MEATS, defaults, calc, describe, fmtAmount, parseAmount };

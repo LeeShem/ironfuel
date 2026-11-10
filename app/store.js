@@ -74,7 +74,9 @@ function loadState(storage) {
   const raw = storage.getItem(KEY);
   if (!raw) return emptyState();
   try {
-    return JSON.parse(raw);
+    const st = JSON.parse(raw);
+    if (!st || typeof st.days !== 'object' || Array.isArray(st.days)) throw new Error('onverwachte vorm');
+    return st;
   } catch {
     storage.setItem(KEY + ':kapot', raw); // niet overschrijven zonder kopie
     return emptyState();
