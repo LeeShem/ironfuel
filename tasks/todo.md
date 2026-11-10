@@ -54,9 +54,9 @@ Het scherm met maaltijdtegels, het invulscherm met − en +, "Toevoegen", het da
 - **Bestanden:** `app/img/*`, `app/CREDITS.md`, `app/meals.js`
 
 ## Taak 8: Beginscherm-app en online zetten
-- [ ] Icoon, schermvullend openen vanaf het beginscherm, en loggen werkt offline
-- [ ] **Eerst jouw akkoord**, daarna online zetten via GitHub Pages
-- [ ] Een korte installatie-uitleg in `README.md`, inclusief waar je je API-sleutel invult
+- [x] Icoon, schermvullend openen vanaf het beginscherm, en loggen werkt offline
+- [x] **Eerst jouw akkoord**, daarna online zetten via GitHub Pages
+- [x] Een korte installatie-uitleg in `README.md`, inclusief waar je je API-sleutel invult
 - **Controle:** de app op je iPhone installeren en starten
 - **Bestanden:** `app/manifest.webmanifest`, `app/sw.js`, `app/icon.png`, `README.md`
 
