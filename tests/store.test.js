@@ -109,3 +109,19 @@ test('coach-context: lege dag', () => {
   assert.match(c, /nog niets ingevoerd/);
   assert.match(c, /Trainingen[^\n]*:\n- geen ingevoerd/);
 });
+
+test('eigen macro\'s: geldige invoer wordt een item', () => {
+  assert.deepEqual(S.manualItem({ name: '  Proteïnereep ', kcal: '210', carbs: '22,5', protein: '20', fat: '7', fiber: '' }),
+    { name: 'Proteïnereep', kcal: 210, carbs: 22.5, protein: 20, fat: 7, fiber: 0 });
+});
+
+test('eigen macro\'s: calorieën leeg → berekend uit koolhydraten, eiwit en vet', () => {
+  assert.equal(S.manualItem({ name: 'Shake', kcal: '', carbs: '30', protein: '25', fat: '5', fiber: '' }).kcal, 265); // 4·30 + 4·25 + 9·5
+});
+
+test('eigen macro\'s: ongeldige invoer wordt geweigerd', () => {
+  assert.throws(() => S.manualItem({ name: '', kcal: '100', carbs: '', protein: '', fat: '', fiber: '' }), /naam/);
+  assert.throws(() => S.manualItem({ name: 'x', kcal: '-5', carbs: '', protein: '', fat: '', fiber: '' }), /getal/);
+  assert.throws(() => S.manualItem({ name: 'x', kcal: 'abc', carbs: '', protein: '', fat: '', fiber: '' }), /getal/);
+  assert.throws(() => S.manualItem({ name: 'x', kcal: '', carbs: '', protein: '', fat: '', fiber: '' }), /calorieën/);
+});

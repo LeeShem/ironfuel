@@ -37,6 +37,10 @@ Een app voor de iPhone waarmee ik (80 kg, in training voor Ironman Barcelona op 
 - Een tekstveld, bijvoorbeeld "bord pad thai met kip en een cola". Claude schat de calorieën en macro's.
 - Je ziet de schatting eerst en tikt dan op "Toevoegen".
 
+### 3b. Eigen maaltijd met bekende macro's (toegevoegd na taak 8)
+- Knop "+ Maaltijd met eigen macro's": je vult zelf naam, calorieën, koolhydraten, eiwit, vet en vezels in. Hiervoor is Claude niet nodig, dus het kost niets.
+- Laat je de calorieën leeg, dan rekent de app ze uit: 4 × koolhydraten + 4 × eiwit + 9 × vet.
+
 ### 4. Coach (advies van Claude)
 - Een chatscherm met drie snelknoppen:
   - "Wat kan ik nu nog het beste eten?"

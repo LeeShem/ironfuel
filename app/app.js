@@ -157,6 +157,40 @@ $('#estimate').addEventListener('click', e => {
   $('#estimate').innerHTML = '';
 });
 
+/* ---------- Eigen maaltijd met zelf ingevulde macro's ---------- */
+function openManual() {
+  const f = (id, label, ph, full) => `<label class="${full ? 'full' : ''}">${label}
+    <input id="m-${id}" class="field" ${id === 'name' ? 'type="text" maxlength="60" autocomplete="off"' : 'type="text" inputmode="decimal"'} placeholder="${ph}"></label>`;
+  sheet.innerHTML = `${sheetHead("Eigen macro's")}
+    <div class="sheet-body"><div class="fields">
+      ${f('name', 'Naam', 'Bijv. proteïnereep', true)}
+      ${f('kcal', 'Calorieën (kcal)', 'leeg = berekenen', true)}
+      ${f('carbs', 'Koolhydraten (g)', '0')}
+      ${f('protein', 'Eiwit (g)', '0')}
+      ${f('fat', 'Vet (g)', '0')}
+      ${f('fiber', 'Vezels (g)', '0')}
+    </div><p class="error" id="m-error" role="alert"></p></div>
+    <div class="sheet-foot"><button type="button" class="primary" data-act="addmanual">Toevoegen aan ${esc(dateText(current).toLowerCase())}</button></div>`;
+  $('#m-name').value = $('#customText').value.trim().slice(0, 60);
+  sheet.oninput = sheet.onchange = null;
+  sheet.onfocusin = null;
+  sheet.onclick = e => {
+    const act = e.target.closest('button')?.dataset.act;
+    if (act === 'close') return sheet.close();
+    if (act !== 'addmanual') return;
+    const v = id => $('#m-' + id).value;
+    let r;
+    try { r = manualItem({ name: v('name'), kcal: v('kcal'), carbs: v('carbs'), protein: v('protein'), fat: v('fat'), fiber: v('fiber') }); }
+    catch (err) { $('#m-error').textContent = err.message; return; }
+    const it = addItem(state, current, { mealId: null, img: null, desc: 'eigen macro\'s', ...r });
+    persist(); sheet.close(); renderToday();
+    $('#customText').value = '';
+    toast(`${r.name} toegevoegd · ${nl(r.kcal)} kcal`, () => { removeItem(state, current, it.id); persist(); renderToday(); });
+  };
+  sheet.showModal();
+}
+$('#manualBtn').onclick = openManual;
+
 /* ---------- Invulscherm ---------- */
 const sheet = $('#sheet');
 sheet.addEventListener('click', e => { if (e.target === sheet) sheet.close(); }); // tik naast het scherm

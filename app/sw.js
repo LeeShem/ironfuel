@@ -3,7 +3,7 @@
 // (een update is dus bij de volgende keer openen zichtbaar).
 // Verzoeken naar Claude (andere website) gaan altijd gewoon via internet.
 
-const CACHE = 'ironfuel-v1';
+const CACHE = 'ironfuel-v2';
 const FILES = [
   './', 'index.html', 'styles.css', 'meals.js', 'store.js', 'claude.js', 'app.js',
   'manifest.webmanifest', 'credits.json', 'icon-180.png', 'icon-192.png', 'icon-512.png',

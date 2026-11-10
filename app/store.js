@@ -27,6 +27,22 @@ function addItem(st, k, item) {
   return it;
 }
 
+// Maaltijd met zelf ingevulde macro's. Velden zijn tekst uit het formulier ('' = leeg).
+function manualItem({ name, kcal, carbs, protein, fat, fiber }) {
+  name = String(name || '').trim().slice(0, 60);
+  if (!name) throw new Error('Vul een naam in');
+  const num = v => {
+    if (String(v ?? '').trim() === '') return null;
+    const n = Number(String(v).replace(',', '.'));
+    if (!Number.isFinite(n) || n < 0 || n >= 10000) throw new Error('Vul een geldig getal in (0 of meer)');
+    return n;
+  };
+  const m = { carbs: num(carbs) ?? 0, protein: num(protein) ?? 0, fat: num(fat) ?? 0, fiber: num(fiber) ?? 0 };
+  const k = num(kcal) ?? Math.round(m.carbs * 4 + m.protein * 4 + m.fat * 9);
+  if (k <= 0) throw new Error("Vul calorieën of macro's in");
+  return { name, kcal: k, ...m };
+}
+
 const SPORTS = { zwemmen: 'Zwemmen', fietsen: 'Fietsen', lopen: 'Lopen' };
 const INTENSITIES = { rustig: 'Rustig', gemiddeld: 'Gemiddeld', zwaar: 'Zwaar' };
 
@@ -171,6 +187,6 @@ const clearApiKey = storage => storage.removeItem(KEY + ':apikey');
 
 if (typeof module !== 'undefined') module.exports = {
   KEY, RACE_DATE, BODY_KG, dateKey, shiftDate, daysBetween, emptyState, getDay, ensureDay,
-  addItem, removeItem, totals, loadState, saveState, SPORTS, INTENSITIES, addTraining, coachContext,
+  addItem, removeItem, totals, loadState, saveState, SPORTS, INTENSITIES, addTraining, manualItem, coachContext,
   MODELS, getModel, setModel, encryptText, decryptText,
 };
