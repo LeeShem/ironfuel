@@ -73,7 +73,7 @@ Een app voor de iPhone waarmee ik (80 kg, in training voor Ironman Barcelona op 
 
 ## Commando's (voor de ontwikkeling)
 ```
-Testen:            node --test tests/
+Testen:            node --test "tests/*.test.js"
 Lokaal bekijken:   python -m http.server 8000   (open daarna http://localhost:8000)
 ```
 

@@ -4,7 +4,7 @@
 Alle 13 standaardmaaltijden met hun ingrediënten, standaardhoeveelheden en voedingswaarden, plus de rekenfunctie "hoeveelheden → kcal, koolhydraten, eiwit, vet, vezels".
 - [x] Alle maaltijden en vleessoorten uit de spec staan erin, met de goedgekeurde standaardwaarden
 - [x] De berekening klopt voor de standaardportie en voor aangepaste hoeveelheden
-- **Controle:** `node --test tests/` slaagt (bijvoorbeeld: Brinta standaard ≈ 240 kcal; 2 sneetjes bruin + 2 plakjes kaas klopt)
+- **Controle:** `node --test "tests/*.test.js"` slaagt (bijvoorbeeld: Brinta standaard ≈ 240 kcal; 2 sneetjes bruin + 2 plakjes kaas klopt)
 - **Bestanden:** `app/meals.js`, `tests/meals.test.js`
 
 ## Taak 2: Eerste werkende app – loggen en dagtotaal

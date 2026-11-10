@@ -39,7 +39,7 @@ De sleutel wordt versleuteld op je telefoon bewaard en gaat alleen naar Anthropi
 ## Voor ontwikkelaars
 
 ```
-Testen:            node --test tests/
+Testen:            node --test "tests/*.test.js"
 Lokaal bekijken:   cd app && python -m http.server 8000   → http://localhost:8000
 ```
 
